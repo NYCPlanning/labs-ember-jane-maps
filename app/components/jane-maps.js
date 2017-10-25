@@ -1,0 +1,1 @@
+export { default } from 'ember-jane-maps/components/jane-maps';

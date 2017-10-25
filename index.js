@@ -2,5 +2,9 @@
 'use strict';
 
 module.exports = {
-  name: 'ember-jane-maps'
+  name: 'ember-jane-maps',
+
+  isDevelopingAddon: function() {
+    return true;
+  }
 };
