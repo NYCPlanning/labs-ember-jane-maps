@@ -3,7 +3,6 @@ import { computed } from 'ember-decorators/object'; // eslint-disable-line
 import { ParentMixin, ChildMixin } from 'ember-composability-tools';
 import carto from '../utils/carto';
 import layerGroups from '../layer-groups';
-import sources from '../sources';
 import layout from '../templates/components/layer-group';
 
 const { copy, merge, set } = Ember;
