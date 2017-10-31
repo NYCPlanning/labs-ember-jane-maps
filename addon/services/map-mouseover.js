@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import { computed } from 'ember-decorators/object'; // eslint-disable-line
+import union from 'npm:@turf/union';
 
 const { get } = Ember;
 const { service } = Ember.inject;
@@ -10,7 +11,7 @@ export default Ember.Service.extend({
 
   currentEvent: null,
 
-  highlightedFeature: [],
+  highlightedFeatures: [],
 
   tooltipTemplate: '',
   highlightedLayer: null,
@@ -54,7 +55,7 @@ export default Ember.Service.extend({
     return get(feature, 'properties.bbl');
   },
 
-  @computed('highlightedFeature')
+  @computed('highlightedFeatures')
   highlightedFeatureSource(features) {
     return {
       type: 'geojson',
@@ -65,7 +66,7 @@ export default Ember.Service.extend({
     };
   },
 
-  highlighter(e) {
+  highlighter(e, source, sourceLayer, uniqueidProperty) {
     const map = e.target;
     this.set('currentEvent', e);
 
@@ -75,15 +76,36 @@ export default Ember.Service.extend({
     const layers = this.get('registeredLayers.highlightableAndVisibleLayerIds');
     const features = map.queryRenderedFeatures(e.point, { layers });
 
+
     if (features.length > 0) {
       map.getCanvas().style.cursor = 'pointer';
-
-
+      //
       const thisFeature = features[0];
+      const uniqueId = thisFeature.properties[uniqueidProperty];
 
-      const prevFeature = this.get('highlightedFeature')[0];
-      if (!prevFeature || thisFeature.id !== prevFeature.id) {
-        this.set('highlightedFeature', [thisFeature]);
+      const sourceFeatures = map.querySourceFeatures(source, {
+        sourceLayer,
+        filter: ["==", uniqueidProperty, uniqueId]
+      });
+
+      let unionedFeature = {}
+
+      // join them together
+      if (sourceFeatures.length > 1) {
+          unionedFeature = sourceFeatures[0];
+          for (var i = 1; i < sourceFeatures.length; i++) {
+              unionedFeature = union(unionedFeature, sourceFeatures[i]);
+          }
+      }
+
+      console.log('unionedFeature', unionedFeature);
+
+      const prevFeature = this.get('highlightedFeatures')[0];
+      if (!prevFeature || thisFeature.properties[uniqueidProperty] !== prevFeature.properties[uniqueidProperty]) {
+        console.log('setting new highlighted features')
+        this.set('highlightedFeatures', sourceFeatures);
+        console.log(this.get('highlightedFeatureSource'))
+
         // move the layer
         const layerId = thisFeature.layer.id;
         this.set('highlightedLayer', layerId);
@@ -103,7 +125,7 @@ export default Ember.Service.extend({
     } else {
       map.getCanvas().style.cursor = '';
 
-      this.set('highlightedFeature', []);
+      this.set('highlightedFeatures', []);
     }
   },
 });
