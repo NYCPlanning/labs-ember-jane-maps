@@ -8,16 +8,30 @@ const buildTemplate = (layergroupid, type) => { // eslint-disable-line
   return `https://${cartoDomain}/user/${cartoUser}/api/v1/map/${layergroupid}/{z}/{x}/{y}.${type}`;
 };
 
-const buildSqlUrl = (cleanedQuery, type = 'json') => { // eslint-disable-line
-  return `https://${cartoDomain}/user/${cartoUser}/api/v2/sql?q=${cleanedQuery}&format=${type}`;
+const buildSqlUrl = (cleanedQuery, type = 'json', method) => { // eslint-disable-line
+  let url = `https://${cartoDomain}/user/${cartoUser}/api/v2/sql`;
+  url += method === 'get' ? `?q=${cleanedQuery}&format=${type}` : '';
+  return url
 };
 
 const carto = {
-  SQL(query, type = 'json') {
+  SQL(query, type = 'json', method = 'get') {
     const cleanedQuery = query.replace('\n', '');
-    const url = buildSqlUrl(cleanedQuery, type);
+    const url = buildSqlUrl(cleanedQuery, type, method);
 
-    return fetch(url)
+    let fetchOptions = {};
+
+    if (method === 'post') {
+      fetchOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+        },
+        body: `q=${cleanedQuery}`,
+      }
+    }
+
+    return fetch(url, fetchOptions)
       .then((response) => {
         if (response.ok) {
           return response.json();
