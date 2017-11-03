@@ -61,7 +61,6 @@ export default Ember.Component.extend(ParentMixin, ChildMixin, {
 
   @computed('registeredLayers.layers')
   before(allLayerGroups) {
-    // const allLayerGroups = this.get('registeredLayers.layers');
     const position = allLayerGroups.map(layerGroup => layerGroup.config.id).indexOf(this.get('config.id'));
 
     // walk all layergroups that should be displayed above this one
@@ -70,9 +69,12 @@ export default Ember.Component.extend(ParentMixin, ChildMixin, {
       const bottomLayer = config.layers[0].layer.id;
       const map = this.get('parentComponent.map');
 
-      // if the bottom-most layer of the layergroup exists on the map, use it as the 'before'
-      if (map.getLayer(bottomLayer)) {
-        return bottomLayer;
+      const visible = allLayerGroups[i].attrs.visible;
+      if (visible) {
+        // if the bottom-most layer of the layergroup exists on the map, use it as the 'before'
+        if (map.getLayer(bottomLayer)) {
+          return bottomLayer;
+        }
       }
     }
 
