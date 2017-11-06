@@ -8,16 +8,16 @@ const buildTemplate = (layergroupid, type) => { // eslint-disable-line
   return `https://${cartoDomain}/user/${cartoUser}/api/v1/map/${layergroupid}/{z}/{x}/{y}.${type}`;
 };
 
-const buildSqlUrl = (cleanedQuery, type = 'json', method) => { // eslint-disable-line
+const buildSqlUrl = (cleanedQuery, format = 'json', method) => { // eslint-disable-line
   let url = `https://${cartoDomain}/user/${cartoUser}/api/v2/sql`;
-  url += method === 'get' ? `?q=${cleanedQuery}&format=${type}` : '';
+  url += method === 'get' ? `?q=${cleanedQuery}&format=${format}` : '';
   return url
 };
 
 const carto = {
-  SQL(query, type = 'json', method = 'get') {
+  SQL(query, format = 'json', method = 'get') {
     const cleanedQuery = query.replace('\n', '');
-    const url = buildSqlUrl(cleanedQuery, type, method);
+    const url = buildSqlUrl(cleanedQuery, format, method);
 
     let fetchOptions = {};
 
@@ -27,7 +27,7 @@ const carto = {
         headers: {
           'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
         },
-        body: `q=${cleanedQuery}`,
+        body: `q=${cleanedQuery}&format=${format}`,
       }
     }
 
@@ -39,7 +39,7 @@ const carto = {
         throw new Error('Not found');
       })
       .then((d) => { // eslint-disable-line
-        return type === 'json' ? d.rows : d;
+        return format === 'json' ? d.rows : d;
       });
   },
 
