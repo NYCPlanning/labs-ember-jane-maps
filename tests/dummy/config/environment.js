@@ -21,7 +21,14 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
-    }
+    },
+    
+    'mapbox-gl': {
+      accessToken: 'pk.eyJ1Ijoia3R1cm5leSIsImEiOiJjajFudmQ2Z2owMDBiMnlyd3FtZDl2dDlkIn0.5uUKBumz-7IWM_2PQ6cXQw',
+      map: {
+        style: 'mapbox://styles/mapbox/streets-v9?optimize=true'
+      }
+    },
   };
 
   if (environment === 'development') {
