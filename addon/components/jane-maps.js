@@ -21,28 +21,33 @@ export default EmberMapboxGL.extend(ParentMixin, {
     this._super(...arguments);
 
     const sources = this.get('sources');
-    const cartoSourcePromises = Object.keys(sources)
-      .filter(key => sources[key].type === 'cartovector')
-      .map((key) => {
-        const source = sources[key];
-        const { minzoom = 0 } = source;
 
-        return carto.getVectorTileTemplate(source['source-layers'])
-          .then(template => ({
-            id: source.id,
-            type: 'vector',
-            tiles: [template],
-            minzoom,
-          }));
-      });
+    if (sources) {
+      const cartoSourcePromises = Object.keys(sources)
+        .filter(key => sources[key].type === 'cartovector')
+        .map((key) => {
+          const source = sources[key];
+          const { minzoom = 0 } = source;
 
-    this.set('cartoSourcePromises',
-      Promise.all(cartoSourcePromises).then(sources => {
-        window.map = map;
-        sources.forEach(source => {
-          map.addSource(source.id, source);
+          return carto.getVectorTileTemplate(source['source-layers'])
+            .then(template => ({
+              id: source.id,
+              type: 'vector',
+              tiles: [template],
+              minzoom,
+            }));
         });
-      })
-    );
+
+      if(!this.isDestroyed) {
+        this.set('cartoSourcePromises',
+          Promise.all(cartoSourcePromises).then(sources => {
+            window.map = map;
+            sources.forEach(source => {
+              map.addSource(source.id, source);
+            });
+          })
+        );
+      }
+    }
   }
 });

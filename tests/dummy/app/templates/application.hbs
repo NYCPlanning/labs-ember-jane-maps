@@ -1,3 +1,10 @@
 <h2 id="title">Welcome to Ember</h2>
 
-{{outlet}}
+{{jane-maps
+  id='map'
+  sources=sources
+  initOptions=(hash style='mapbox://styles/mapbox/light-v9'
+                    zoom=zoom
+                    center=center
+                    hash=false
+                    interactive=false)}}
