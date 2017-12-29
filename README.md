@@ -2,9 +2,11 @@
 
 Ember Jane Maps is an Ember addon built on top of `ember-mapbox-gl`. It provides a set of tools for building and maintaining complex map-based web applications.
 
+![Example](https://github.com/NYCPlanning/ember-jane-maps/raw/master/JE5rKqaQj5.gif)
+
 **Which abstract case does this solve?**
 
-Existing Ember addons provide bindings for managing Mapbox GL state. However, some map-based web applications feature a very large number of [layers](https://www.mapbox.com/mapbox-gl-js/style-spec/#layers), each requiring state that may also need to be managed through URL parameters. These requirements lends itself to potentially unmaintainable source code. This addon implements a pattern that has helped with a number of map-based Ember application.
+Existing Ember addons provide bindings for managing Mapbox GL state. However, some map-based web applications feature a very large number of [layers](https://www.mapbox.com/mapbox-gl-js/style-spec/#layers), each requiring state that may also need to be managed through URL parameters. These requirements lend themselves to potentially unmaintainable source code. This addon implements a pattern that has helped with a number of map-based Ember application.
 
 ## Installation
 `ember install ember-jane-maps`
