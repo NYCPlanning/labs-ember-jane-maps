@@ -79,7 +79,6 @@ const carto = {
         .catch(err => reject(err))
         .then(response => response.json())
         .then((json) => {
-          console.log(json)
           resolve(buildTemplate(json));
         });
     });
