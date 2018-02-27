@@ -1,6 +1,6 @@
 {
   "name": "ember-jane-maps",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "The default blueprint for ember-cli addons.",
   "keywords": [
     "ember-addon"
@@ -26,7 +26,7 @@
     "ember-mapbox-gl": "0.9.0",
     "ember-promise-helpers": "^1.0.3",
     "ember-truth-helpers": "^2.0.0",
-    "mapbox-gl": "^0.44.1"
+    "mapbox-gl": "^0.44.0"
   },
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.5",
