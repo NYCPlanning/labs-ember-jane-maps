@@ -11,7 +11,7 @@
     "doc": "doc",
     "test": "tests"
   },
-  "repository": "",
+  "repository": "NYCPlanning/labs-ember-jane-maps",
   "scripts": {
     "build": "ember build",
     "start": "ember server",
